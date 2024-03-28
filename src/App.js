@@ -1,31 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import './App.css';
+import data from './data'; 
 
 function App() {
-  const [data, setData] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [sortConfig, setSortConfig] = useState({ key: null, direction: 'ascending' });
-
-  const getData = () => {
-    fetch('/Data.json', {
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json'
-      }
-    })
-      .then(response => response.json())
-      .then(mydata => {
-        setData(mydata);
-      })
-      .catch(error => {
-        console.error('Error fetching data:', error);
-        alert("Error Fetching Data: " + error);
-      });
-  };
-
-  useEffect(() => {
-    getData();
-  }, []);
 
   const handleSearch = (e) => {
     setSearchQuery(e.target.value);
@@ -62,7 +41,6 @@ function App() {
     }
     return sortableData;
   };
-  
 
   const filteredData = sortedData().filter((user) =>
     Object.values(user).some(value =>
@@ -74,13 +52,13 @@ function App() {
     <div className="container">
       <h1>Customer Data</h1>
       
-        <input
-          type="text"
-          placeholder="Search...."
-          value={searchQuery}
-          onChange={handleSearch}
-          className="search-input"
-        />
+      <input
+        type="text"
+        placeholder="Search...."
+        value={searchQuery}
+        onChange={handleSearch}
+        className="search-input"
+      />
       <table>
         <thead>
           <tr>
@@ -133,7 +111,7 @@ function App() {
             <tr key={index}>
               <td>{user.id}</td>
               <td className="customer-info">
-                <img src={user.image} alt="img not found" />
+                <img src={process.env.PUBLIC_URL + user.image}  alt="img not found" />
                 {user.customer}
               </td>
               <td>{user.lastSeen}</td>
